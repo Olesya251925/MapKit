@@ -11,12 +11,9 @@ import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var mapView: com.yandex.mapkit.mapview.MapView
-
-    // Глобальная переменная для хранения объекта сессии поиска
-    private var searchSession: BlobStoreManager.Session? = null
+    private var isKemerovoDisplayed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,22 +27,30 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         // Находим плавающую кнопку и добавляем обработчик нажатия
         val fabLocation = findViewById<FloatingActionButton>(R.id.fab_location)
         fabLocation.setOnClickListener {
-            getKemerovoCoordinates()
+            if (isKemerovoDisplayed) {
+                moveToKemerovo()
+            } else {
+                moveToMainPostOffice()
+            }
+            // Инвертируем флаг для следующего нажатия
+            isKemerovoDisplayed = !isKemerovoDisplayed
         }
     }
 
-
-    private fun getKemerovoCoordinates() {
+    private fun moveToKemerovo() {
         val kemerovoCoordinates = Point(55.355202, 86.086841)
-
-        // Перемещаем камеру на координаты города Кемерово
-        mapView.map.move(
-            CameraPosition(kemerovoCoordinates, 11.0f, 0.0f, 0.0f)
-        )
+        mapView.map.move(CameraPosition(kemerovoCoordinates, 11.0f, 0.0f, 0.0f))
     }
+
+    private fun moveToMainPostOffice() {
+        val mainPostOfficeCoordinates = Point(55.35448, 86.08620)
+        mapView.map.move(CameraPosition(mainPostOfficeCoordinates, 17.0f, 0.0f, 0.0f))
+    }
+
     override fun onStart() {
         super.onStart()
         MapKitFactory.getInstance().onStart()
@@ -57,5 +62,4 @@ class MainActivity : AppCompatActivity() {
         MapKitFactory.getInstance().onStop()
         super.onStop()
     }
-
 }
