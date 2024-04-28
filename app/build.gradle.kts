@@ -47,5 +47,4 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.yandex.android:maps.mobile:4.6.1-lite")
-    implementation("com.yandex.android:maps.mobile:4.1.8-full")
 }

@@ -1,7 +1,7 @@
 package com.example.mapkit
 
-import android.app.blob.BlobStoreManager
 import android.os.Bundle
+import android.widget.ToggleButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,9 +10,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
+import com.yandex.mapkit.mapview.MapView
+import com.yandex.mapkit.traffic.TrafficLayer
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var mapView: com.yandex.mapkit.mapview.MapView
+    private lateinit var mapView: MapView
+    private lateinit var trafficLayer: TrafficLayer
     private var isKemerovoDisplayed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +24,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mapView = findViewById(R.id.mapView)
 
+        // Инициализируем слой трафика
+        trafficLayer = MapKitFactory.getInstance().createTrafficLayer(mapView.mapWindow)
+
+        // Включаем отображение слоя трафика
+        trafficLayer.setTrafficVisible(false)
+
+
+        // Включаем обработку отступов краев экрана
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -38,6 +49,16 @@ class MainActivity : AppCompatActivity() {
             }
             // Инвертируем флаг для следующего нажатия
             isKemerovoDisplayed = !isKemerovoDisplayed
+        }
+
+        // Обработчик для переключателя пробок
+        val toggleButton = findViewById<ToggleButton>(R.id.toggleButton)
+        toggleButton.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                trafficLayer.setTrafficVisible(true)
+            } else {
+                trafficLayer.setTrafficVisible(false)
+            }
         }
     }
 
@@ -63,3 +84,4 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
     }
 }
+
