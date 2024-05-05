@@ -94,6 +94,36 @@ class MainActivity : AppCompatActivity() {
                 trafficLayer.setTrafficVisible(false)
             }
         }
+
+        // Добавляем обработчик нажатия на карту
+        mapView.map.addInputListener(object : InputListener {
+            override fun onMapTap(map: com.yandex.mapkit.map.Map, point: Point) {
+                // Вызываем метод добавления точки на карту при нажатии на карту
+                addPlacemark(point)
+            }
+
+            override fun onMapLongTap(map: com.yandex.mapkit.map.Map, point: Point) {
+                // Здесь можно добавить логику для долгого нажатия на карту, если необходимо
+            }
+        })
+    }
+
+    // Метод, вызываемый при нажатии на объект на карте
+    private fun onMapObjectTap(mapObject: PlacemarkMapObject, point: Point): Boolean {
+        // Добавляем маркер на карту в месте нажатия
+        addPlacemark(point)
+        // Возвращаем true, чтобы предотвратить передачу события дальше
+        return true
+    }
+
+    private fun addPlacemark(point: Point) {
+        // Создаем маркер
+        val placemark = mapObjectCollection.addPlacemark(point)
+        // Добавляем обработчик нажатия на маркер
+        placemark.addTapListener { _, _ ->
+            // Вызываем метод для обработки нажатия на объект на карте
+            onMapObjectTap(placemark, point)
+        }
     }
 
     private fun moveToKemerovo() {
@@ -101,11 +131,6 @@ class MainActivity : AppCompatActivity() {
         mapView.map.move(CameraPosition(kemerovoCoordinates, 11.0f, 0.0f, 0.0f))
         // уровень масштабирования карты
         // угол поворота и угол наклона камеры
-    }
-
-    private fun moveToMainPostOffice() {
-        val mainPostOfficeCoordinates = Point(55.35448, 86.08620)
-        mapView.map.move(CameraPosition(mainPostOfficeCoordinates, 17.0f, 0.0f, 0.0f))
     }
 
     // Инициализация и запуск компонентов карты при входе в активность.
@@ -122,6 +147,3 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
     }
 }
-
-
-
