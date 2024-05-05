@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     private var isKemerovoDisplayed = true
     private lateinit var mapObjectCollection: MapObjectCollection
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MapKitFactory.setApiKey("ebaaef2d-2b8e-415f-a66d-97dd134028cc")
@@ -77,8 +76,6 @@ class MainActivity : AppCompatActivity() {
                 val currentLocation = Point(55.359287, 86.172043)
                 mapView.map.move(CameraPosition(currentLocation, 16.0f, 0.0f, 0.0f))
 
-                // Показываем местоположение пользователя
-                userLocationLayer.isVisible = true
             }
             // Инвертируем флаг для следующего нажатия
             isKemerovoDisplayed = !isKemerovoDisplayed
