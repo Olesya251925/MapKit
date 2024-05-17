@@ -62,9 +62,6 @@ class MainActivity : AppCompatActivity() {
 
         mapView.map.addInputListener(inputListener)
 
-        // Вызываем метод создания маркера для текущего местоположения при запуске активности
-        createMark(Point(55.359287, 86.172043))
-
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -92,16 +89,6 @@ class MainActivity : AppCompatActivity() {
                 trafficLayer.setTrafficVisible(false)
             }
         }
-        /*// Добавляем обработчик нажатия на карту
-        mapView.map.addInputListener(object : InputListener {
-            override fun onMapTap(map: com.yandex.mapkit.map.Map, point: Point) {
-                // Вызываем метод добавления точки на карту при нажатии на карту
-                addPlacemark(point)
-            }
-            override fun onMapLongTap(map: com.yandex.mapkit.map.Map, point: Point) {
-                // Здесь можно добавить логику для долгого нажатия на карту, если необходима
-            }
-        })*/
     }
 
     // Проверяем разрешение
@@ -113,33 +100,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun createMark(point: Point) {
-        // Загружаем изображение из ресурсов Drawable в виде Bitmap
-        val iconBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.us)
-
-        // Создаем ImageProvider из Bitmap
-        val imageProvider = ImageProvider.fromBitmap(iconBitmap)
-
-        // Создаем метку для карты и устанавливаем иконку с помощью ImageProvider
-        val placemark = mapObjectCollection.addPlacemark(point, imageProvider)
-    }
-
     private fun addPlacemark(point: Point) {
-        //mapView.map.mapObjects.addPlacemark(point)
+
         mapObjectCollection.addPlacemark(point)
     }
 
     private fun moveToKemerovo() {
         val kemerovoCoordinates = Point(55.355202, 86.086841)
         val cameraPosition = CameraPosition(kemerovoCoordinates, 11.0f, 0.0f, 0.0f)
-        val animationDuration = 5.0f // Длительность анимации в секундах
+        val animationDuration = 5.0f
         mapView.map.move(cameraPosition, Animation(Animation.Type.SMOOTH, animationDuration), null)
     }
 
     private fun moveToCurrentLocation() {
         val currentLocation = Point(55.359287, 86.172043)
         val cameraPosition = CameraPosition(currentLocation, 16.0f, 0.0f, 0.0f)
-        val animationDuration = 2.0f // Длительность анимации в секундах
+        val animationDuration = 2.0f
         mapView.map.move(cameraPosition, Animation(Animation.Type.SMOOTH, animationDuration), null)
     }
 
