@@ -34,12 +34,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mapObjectCollection: MapObjectCollection
 
     private val inputListener = object : InputListener {
-        override fun onMapTap(p0: Map, p1: Point) {
-            addPlacemark(p1)
+        override fun onMapTap(map: Map, point: Point) {
+            addPlacemark(point)
         }
 
-        override fun onMapLongTap(p0: Map, p1: Point) {
-            addPlacemark(p1)
+        override fun onMapLongTap(map: Map, point: Point) {
+            addPlacemark(point)
         }
     }
 
